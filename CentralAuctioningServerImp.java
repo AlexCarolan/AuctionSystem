@@ -11,6 +11,7 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
 {
 	//Stores the current highest auction ID
 	public static int currentID = 1;
+	public static int creatorID = 1;
 	
 	//Setup of the hash table for auctions
     public static final HashMap<Integer, Auction> auctions = new HashMap<Integer, Auction>();
@@ -20,12 +21,25 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
      * @param SP - starting price of auction
      * @param desc - auction description
      * @param RP - reserve price of the auction
+     * @return string describing outcome of request
      */
-	public void addAuction(double SP, String desc, double RP) throws RemoteException
+	public String addAuction(double SP, String desc, double RP, int CID) throws RemoteException
     {
-		auctions.put(currentID, new Auction(currentID,SP,desc,RP));
+		auctions.put(currentID, new Auction(currentID, CID, SP, desc, RP));
         currentID++;
+        return "\nYour auction was created successfully\n";
 	}
+
+    /**
+     * Allocates and provides a new creator ID
+     * @return the new creator ID
+     * @throws RemoteException
+     */
+	public int getNewCreatorID() throws RemoteException
+    {
+        creatorID++;
+        return creatorID;
+    }
 
     /**
      * provides access to a specific auction using its ID
@@ -101,5 +115,40 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
 
 		return auctionText;
 	}
+
+    /**
+     * Prvoides auction listings in text form - limited to acutons with matching creatorIDs
+     * @param CID
+     * @return A string containing auction listings belonging to the creator
+     * @throws RemoteException
+     */
+    public String getAuctionText(int CID) throws RemoteException
+    {
+        String auctionText = "";
+        Set set = auctions.entrySet();
+        Iterator iterator = set.iterator();
+
+        while(iterator.hasNext()) {
+            Map.Entry mentry = (Map.Entry)iterator.next();
+            Auction auctionListing = (Auction) mentry.getValue();
+
+            //Check that the creator IDs match
+            if (auctionListing.getCreatorID() == CID)
+            {
+                auctionText = auctionText
+                        + (auctionListing.getID() + "\t"
+                        + String.format("%.2f", auctionListing.getHighestBid()) + "\t\t"
+                        + String.format("%.2f", auctionListing.getReservePrice()) + "\t\t"
+                        + auctionListing.getDescription() + "\n");
+            }
+        }
+
+        if (auctionText.equals(""))
+        {
+            return "\nYou have no active auctions\n";
+        }
+
+        return auctionText;
+    }
 }
 

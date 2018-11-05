@@ -1,18 +1,25 @@
 import java.rmi.Naming;
+
+/**
+ * This class allows for connection to the remote auction server object
+ */
 public class AuctionConnector
 {
 
+    /**
+     * provides a connection to the auction, ends program if lookup fails
+     * @return the active auction server
+     */
     public CentralAuctioningServer connect()
     {
         CentralAuctioningServer server = null;
         int attempt = 1;
 
-        //attaempt to find the RMI object
+        //attempt to find the RMI object
 		while (attempt < 4) {
             try {
                 // Get a reference to the remote object through the rmiregistry
                 server = (CentralAuctioningServer) Naming.lookup("rmi://localhost/AuctionServer");
-                server.addAuction(20.00, "New hat", 40);
                 break;
             } catch (Exception e) {
                 System.out.println("\nFailed to find the RMI object\nAttempt Number:" + attempt + "\n");

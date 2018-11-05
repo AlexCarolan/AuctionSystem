@@ -4,8 +4,8 @@
 public class Auction
 {
 	//Data relating to auction
-	
 	private int auctionID;
+	private int creatorID;
 	private double startingPrice;
 	private String description;
 	private double reservePrice;
@@ -17,13 +17,15 @@ public class Auction
     /**
      * Constructor for auction class
      * @param ID - ID for the auction
+	 * @param CID - ID of the auctions creator
      * @param SP - Starting price for the auction
      * @param desc - Description of the auction
      * @param RP - Reserve price for the auction
      */
-	public Auction (int ID, double SP, String desc, double RP)
+	public Auction (int ID, int CID, double SP, String desc, double RP)
 	{
 		auctionID = ID;
+		creatorID = CID;
 		startingPrice = SP;
 		description = desc;
 		reservePrice = RP;
@@ -40,6 +42,14 @@ public class Auction
 	{
 		return auctionID;
 	}
+
+    /**
+     * Provides access to the creatorID
+     * @return ID of the auctions creator
+     */
+	public int getCreatorID() {
+	    return creatorID;
+    }
 
     /**
      * Provides access to start price

@@ -1,4 +1,3 @@
-import java.rmi.Naming;
 import java.util.Scanner;
 import java.text.DecimalFormat;
 import java.math.RoundingMode;
@@ -54,17 +53,20 @@ public class BrowseAuction
      * @param server - The server RMI object holding listings
      */
     public static void showListings(CentralAuctioningServer server) {
+
+        System.out.println("=====================================================");
+        System.out.println("\t\t Auction Browser");
+        System.out.println("=====================================================");
+        System.out.println("ID#\tPRICE(GBP)\tDESCRIPTION");
+
         try {
-            System.out.println("=====================================================");
-            System.out.println("\t\t Auction Browser");
-            System.out.println("=====================================================");
-            System.out.println("ID#\tPRICE(GBP)\tDESCRIPTION");
             System.out.println(server.getAuctionText());
-            System.out.println("=====================================================");
         } catch (Exception e) {
             System.out.println("\nFailed to obtain auction listings");
             System.out.println(e);
         }
+
+        System.out.println("=====================================================");
     }
 
     /**

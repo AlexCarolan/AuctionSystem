@@ -8,6 +8,7 @@ public interface CentralAuctioningServer extends Remote
 {
 	
 	public static int currentID = 1; //Stores the current highest auction ID
+	public static int creatorID = 1; //Stores the current highest creator ID
     public static final HashMap<Integer, Auction> auctions = new HashMap<Integer, Auction>(); //Holds all auctions
 
     /**
@@ -16,7 +17,14 @@ public interface CentralAuctioningServer extends Remote
      * @param desc - auction description
      * @param RP - reserve price of the auction
      */
-	public void addAuction(double SP, String desc, double RP) throws RemoteException;
+	public String addAuction(double SP, String desc, double RP, int CID) throws RemoteException;
+
+    /**
+     * Allocates and provides a new creator ID
+     * @return the new creator ID
+     * @throws RemoteException
+     */
+    public int getNewCreatorID() throws RemoteException;
 
     /**
      * Returns a specific auction using its ID
@@ -45,6 +53,14 @@ public interface CentralAuctioningServer extends Remote
 	 * @return A string containing auction listings
 	 */
 	public String getAuctionText()throws RemoteException;
+
+    /**
+     * Prvoides auction listings in text form - limited to acutons with matching creatorIDs
+     * @param CID
+     * @return A string containing auction listings belonging to the creator
+     * @throws RemoteException
+     */
+    public String getAuctionText(int CID) throws RemoteException;
 	
 }
 
