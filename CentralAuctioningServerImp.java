@@ -93,7 +93,10 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
 			Map.Entry mentry = (Map.Entry)iterator.next();
 			Auction auctionListing = (Auction) mentry.getValue();
 
-            auctionText = auctionText + (auctionListing.getID() + "\t" + auctionListing.getHighestBid() + "\t" + auctionListing.getDescription() + "\n");
+            auctionText = auctionText
+					+ (auctionListing.getID() + "\t"
+					+ String.format( "%.2f", auctionListing.getHighestBid()) + "\t\t"
+					+ auctionListing.getDescription() + "\n");
 		}
 
 		return auctionText;

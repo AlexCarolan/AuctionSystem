@@ -8,33 +8,10 @@ import java.math.RoundingMode;
 public class BrowseAuction
 {
 
-	//TO DO:
-	//- Display current auctions (Check if still active)
-	//- Allow bids on aucitons
-
     public static void main(String args[]) {
 
         //Lookup remote auction server object - retry 3 times if failed
-        CentralAuctioningServer server = null;
-        int attempt = 1;
-        while (attempt < 4) {
-            try {
-                // Get a reference to the remote object through the rmiregistry
-                server = (CentralAuctioningServer) Naming.lookup("rmi://localhost/AuctionServer");
-                server.addAuction(20.00, "New hat", 40);
-                break;
-            } catch (Exception e) {
-                System.out.println("\nFailed to find the RMI object\nAttempt Number:" + attempt + "\n");
-                System.out.println(e);
-                attempt++;
-            }
-        }
-
-        //End program if lookup fails
-        if (attempt >= 4) {
-            System.out.println("\nFailed object lookup - Terminating program");
-            System.exit(0);
-        }
+        CentralAuctioningServer server = new AuctionConnector().connect();
 
         //Print out currently active auctions
         showListings(server);
@@ -81,7 +58,7 @@ public class BrowseAuction
             System.out.println("=====================================================");
             System.out.println("\t\t Auction Browser");
             System.out.println("=====================================================");
-            System.out.println("ID#\tPRICE\tDESCRIPTION");
+            System.out.println("ID#\tPRICE(GBP)\tDESCRIPTION");
             System.out.println(server.getAuctionText());
             System.out.println("=====================================================");
         } catch (Exception e) {
