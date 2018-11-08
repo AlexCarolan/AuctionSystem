@@ -122,10 +122,32 @@ public class CreateDriver
         double reservePrice;
         String description;
 
-        //Get the start and reserve price and check for validation
+        //Define decimal format
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.DOWN);
+
+        //Get the start price and check for validation
         try {
             System.out.print("Starting price (GBP): ");
             startPrice = reader.nextDouble();
+        } catch (Exception e) {
+            System.out.println("\n!!! Input was not a valid number !!!\n");
+            reader.nextLine();
+            return;
+        }
+
+        //Truncate doubles to two decimal places for use as currency
+        startPrice =  Double.parseDouble(df.format(startPrice));
+
+        //Check that starting price is above 0
+        if (startPrice <=0) {
+            System.out.println("\n!!! Start price must be 0.01(GBP) or above !!!\n");
+            reader.nextLine();
+            return;
+        }
+
+        //Get reserve price and check for validation
+        try {
             System.out.print("Reserve price (GBP): ");
             reservePrice = reader.nextDouble();
         } catch (Exception e) {
@@ -135,9 +157,6 @@ public class CreateDriver
         }
 
         //Truncate doubles to two decimal places for use as currency
-        DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.DOWN);
-        startPrice =  Double.parseDouble(df.format(startPrice));
         reservePrice =  Double.parseDouble(df.format(reservePrice));
 
         //Check that the reserve price is greater than the starting price
