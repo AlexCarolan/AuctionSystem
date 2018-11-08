@@ -24,6 +24,23 @@ public class Bidder implements Serializable
         email = E;
     }
 
+    /**
+     * Provides the bidders name
+     * @return - the name of the bidder
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    /**
+     * Provides the bidders email
+     * @return - the email of the bidder
+     */
+    public String getEmail() {
+        return email;
+    }
+
 
 
 

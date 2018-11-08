@@ -32,6 +32,15 @@ public interface CentralAuctioningServer extends Remote
      * @return the auction instance requested by ID
      */
 	public Auction getAuction(int ID) throws RemoteException;
+
+	/**
+	 * Attempts to end an active auction
+	 * @param AID - the ID of the auction to end
+	 * @param CID - the ID of the creator making the request
+	 * @return a message explaing the result of the attempt
+	 * @throws RemoteExpection
+	 */
+	public String endAuction(int AID, int CID) throws RemoteException;
 	
 	/**
 	 * Adds a new highest bid and bidder to the specified auction

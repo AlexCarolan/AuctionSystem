@@ -27,7 +27,8 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
     {
 		auctions.put(currentID, new Auction(currentID, CID, SP, desc, RP));
         currentID++;
-        return "\nYour auction was created successfully\n";
+        return "\nYour auction was created successfully, ID: "
+                + (currentID - 1) + "\n";
 	}
 
     /**
@@ -50,6 +51,58 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
     {
 		return auctions.get(ID);
 	}
+
+    /**
+     * Attempts to end an active auction
+     * @param AID - the ID of the auction to end
+     * @param CID - the ID of the creator making the request
+     * @return a message explaing the result of the attempt
+     * @throws RemoteExpection
+     */
+	public String endAuction(int AID, int CID) throws RemoteException
+    {
+        Auction auction = (Auction) auctions.get(AID);
+
+        //Check auction ID mathches active auction
+        if(auction != null)
+        {
+            //Check that the request was made by the auctions creator
+            if(auction.getCreatorID() == CID) {
+
+                //Check that the auction has been bid on
+                if(auction.getStartPrice() >= auction.getHighestBid()){
+                    auctions.remove(AID);
+                    return "\nAuction " + AID + " has ended, no bids were made\n";
+
+                //Check if the reserve has been met
+                } else if (auction.getHighestBid() >= auction.getReservePrice()){
+                    auctions.remove(AID);
+                    return "\nAuction " + AID + " has ended, the higest bid was "
+                            + String.format( "%.2f", auction.getHighestBid())
+                            + " (GBP) the reserve price of "
+                            + String.format( "%.2f", auction.getReservePrice())
+                            + " (GBP) was not met\n";
+
+                //If reserve has been met, display auction winner
+                } else {
+                    auctions.remove(AID);
+                    Bidder winner = auction.getHighestBidder();
+
+                    return "\nAuction " + AID + " has ended successfully!\n"
+                            + "\nWinner Details:\n"
+                            + "Name: " + winner.getName() + "\n"
+                            + "Email: " + winner.getEmail() + "\n"
+                            + "End Price: " + auction.getHighestBid() + "\n";
+                }
+
+            } else {
+                return "\nThis auction does not belong to you\n";
+            }
+
+        } else {
+            return "\nNo auction with an ID of " + AID +" could be found\n";
+        }
+    }
 
 	/**
 	 * Adds a new highest bid to the specified auction
