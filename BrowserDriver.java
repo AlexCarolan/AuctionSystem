@@ -8,7 +8,7 @@ public class BrowserDriver
 {
 
     /**
-     * starts the auction browser
+     * starts the auction browser interface
      */
     public void start(){
 

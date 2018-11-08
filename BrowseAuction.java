@@ -1,5 +1,5 @@
 /**
- * A class that allows users to browse and bid on auctions
+ * Starts and runs the auction browser interface
  */
 public class BrowseAuction
 {
