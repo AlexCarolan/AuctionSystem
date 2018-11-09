@@ -47,6 +47,11 @@ public class CreateDriver
             else if(inputCommand.equals("end") || inputCommand.equals("END") || inputCommand.equals("End"))
             {
                 //Attempts to end an active auction
+                endActiveAuction(creatorID, server, reader);
+            }
+            else
+            {
+                System.out.println("!!! Command not valid !!!");
             }
 
 		}
@@ -103,6 +108,34 @@ public class CreateDriver
         System.out.println("\nCould not obtain creator ID - Terminating program");
         System.exit(0);
         return 1;
+    }
+
+    private void endActiveAuction(int creatorID, CentralAuctioningServer server, Scanner reader)
+    {
+        System.out.println("=====================================================");
+        System.out.println("\t\tEnd Auction");
+        System.out.println("=====================================================");
+
+        int auctionID;
+
+        try {
+            System.out.print("Auction ID: ");
+            auctionID = reader.nextInt();
+        } catch (Exception e) {
+            System.out.println("\n!!! Input was not a valid ID !!!\n");
+            reader.nextLine();
+            return;
+        }
+
+        //Attempt to end the auction on the server
+        try {
+            System.out.println(server.endAuction(auctionID, creatorID));
+            reader.nextLine();
+        } catch (Exception e) {
+            System.out.println("\nFailed to contact remote auction server object");
+            System.out.println(e);
+        }
+
     }
 
 

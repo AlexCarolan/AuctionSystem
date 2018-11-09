@@ -38,6 +38,10 @@ public class BrowserDriver
             {
                 addBid(server, reader);
             }
+            else
+            {
+                System.out.println("!!! Command not valid !!!");
+            }
 
         }
 

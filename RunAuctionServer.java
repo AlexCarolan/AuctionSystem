@@ -30,6 +30,12 @@ public class RunAuctionServer
                 attempt++;
             }
         }
+
+        /* End program if object cannot be bound*/
+        if (attempt >= 4) {
+            System.out.println("\nFailed to start server - Terminating program");
+            System.exit(0);
+        }
     }
 
 }
