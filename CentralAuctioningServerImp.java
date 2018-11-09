@@ -36,21 +36,12 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
      * @return the new creator ID
      * @throws RemoteException
      */
-	public int getNewCreatorID() throws RemoteException
+	public synchronized int getNewCreatorID() throws RemoteException
     {
         creatorID++;
         return creatorID;
     }
 
-    /**
-     * provides access to a specific auction using its ID
-     * @param ID - the desired auctions ID
-     * @return the auction instance requested by ID
-     */
-	public Auction getAuction(int ID) throws RemoteException
-    {
-		return auctions.get(ID);
-	}
 
     /**
      * Attempts to end an active auction
@@ -117,30 +108,22 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
         //Check that auction is active
         if(biddingAuction != null)
         {
-            //Check that bid is higher than current highest
-            if(P <= biddingAuction.getHighestBid())
-            {
-                return "\nBidding pice was too low - bid must be above " + biddingAuction.getHighestBid() +"\n";
-            }
+            synchronized(this) {
+                //Check that bid is higher than current highest
+                if(P <= biddingAuction.getHighestBid())
+                {
+                    return "\nBidding pice was too low - bid must be above " + biddingAuction.getHighestBid() +"\n";
+                }
 
-            //Add new bid if info is valid
-            biddingAuction.setHighestBid(P);
-            biddingAuction.setHighestBidder(B);
+                //Add new bid if info is valid
+                biddingAuction.setHighestBid(P);
+                biddingAuction.setHighestBidder(B);
+            }
             return "\nYour bid was successfuly made\n";
         } else {
             return "\nBid failed - no auction with an ID of " + ID + " was found\n";
         }
 	}
-
-	/**
-	 * Provides the current auction ID
-	 * @return the ID of the current auction
-	 */
-	public int getCurrentID() throws RemoteException
-	{
-		return currentID;
-	}
-
 
     /**
      * Prvoides auction listings in text form

@@ -26,12 +26,6 @@ public interface CentralAuctioningServer extends Remote
      */
     public int getNewCreatorID() throws RemoteException;
 
-    /**
-     * Returns a specific auction using its ID
-     * @param ID - the desired auctions ID
-     * @return the auction instance requested by ID
-     */
-	public Auction getAuction(int ID) throws RemoteException;
 
 	/**
 	 * Attempts to end an active auction
@@ -50,12 +44,6 @@ public interface CentralAuctioningServer extends Remote
      * @return a message of success or explaining failure of the attempt
 	 */
     public String addBid(int ID, double P, Bidder B) throws RemoteException;
-
-	/**
-	 * Returns the current auction ID
-	 * @return the ID of the current auction
-	 */
-	public int getCurrentID() throws RemoteException;
 
 	/**
 	 * Prvoides auction listings in text form
