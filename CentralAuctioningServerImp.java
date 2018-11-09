@@ -75,7 +75,7 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
                     return "\nAuction " + AID + " has ended, no bids were made\n";
 
                 //Check if the reserve has been met
-                } else if (auction.getHighestBid() >= auction.getReservePrice()){
+                } else if (auction.getHighestBid() < auction.getReservePrice()){
                     auctions.remove(AID);
                     return "\nAuction " + AID + " has ended, the higest bid was "
                             + String.format( "%.2f", auction.getHighestBid())
