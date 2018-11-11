@@ -23,7 +23,7 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
      * @param RP - reserve price of the auction
      * @return string describing outcome of request
      */
-	public String addAuction(double SP, String desc, double RP, int CID) throws RemoteException
+	public synchronized String addAuction(double SP, String desc, double RP, int CID) throws RemoteException
     {
 		auctions.put(currentID, new Auction(currentID, CID, SP, desc, RP));
         currentID++;
@@ -108,6 +108,7 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
         //Check that auction is active
         if(biddingAuction != null)
         {
+            //!!! Not Efficent !!! Improve This !!! Possibly use concurrent hash map
             synchronized(this) {
                 //Check that bid is higher than current highest
                 if(P <= biddingAuction.getHighestBid())

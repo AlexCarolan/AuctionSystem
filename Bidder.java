@@ -9,6 +9,16 @@ public class Bidder implements Serializable
 	private String email;
 
     /**
+     * Constructor for bidder class
+     * @param N - bidder name
+     * @param E - bidders email
+     */
+	public Bidder(String N, String E){
+	    name = N;
+	    email = E;
+    }
+
+    /**
      * Sets the name to input value
      * @param N bidders name
      */

@@ -1,6 +1,8 @@
 import java.util.Scanner;
 import java.text.DecimalFormat;
 import java.math.RoundingMode;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 /**
  * A class that allows users to browse and bid on auctions
  */
@@ -91,7 +93,7 @@ public class BrowserDriver
 
         int auctionID;
         double bidAmmount;
-        Bidder bidder = new Bidder();
+
 
         //Get the ID number and bid ammount check input valid
         try {
@@ -108,21 +110,32 @@ public class BrowserDriver
         //Check bid is valid format
         if (bidAmmount <= 0) {
             System.out.println("\n!!! Input bid was not valid, must be larger than zero !!!\n");
+            reader.nextLine();
             return;
         }
 
         //Truncate bid value to two decimal places for use as currency
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.DOWN);
-        bidAmmount =  Double.parseDouble(df.format(bidAmmount));
+        bidAmmount = Double.parseDouble(df.format(bidAmmount));
 
         //Get the users name and email
         System.out.print("Enter your name: ");
         reader.nextLine();
-        bidder.setName(reader.nextLine());
+        String name = reader.nextLine();
 
-        System.out.print("Enter your email adress: ");
-        bidder.setEmail(reader.nextLine());
+        System.out.print("Enter your email: ");
+        String email = reader.nextLine();
+
+        //Email validation check
+        Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
+            System.out.println("\n!!! Input email was not valid !!!\n");
+            return;
+        }
+
+        Bidder bidder = new Bidder(name, email);
 
         //Attempt contact auction server and add bid
         try {
