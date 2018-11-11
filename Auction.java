@@ -11,6 +11,7 @@ public class Auction
 	private double reservePrice;
 	private double highestBid;
 	private Bidder highestBidder = null;
+	private boolean locked = false;
 	
 	//Auction constructor
 
@@ -108,7 +109,7 @@ public class Auction
 	}
 
     /**
-     *
+     * changes the auctions highest bidder
      * @param B - Bidder instance of the new highest bidder
      */
 	public void setHighestBidder(Bidder B)

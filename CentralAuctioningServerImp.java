@@ -108,8 +108,8 @@ public class CentralAuctioningServerImp implements CentralAuctioningServer
         //Check that auction is active
         if(biddingAuction != null)
         {
-            //!!! Not Efficent !!! Improve This !!! Possibly use concurrent hash map
-            synchronized(this) {
+            //Acquire lock on Auction object
+            synchronized(biddingAuction) {
                 //Check that bid is higher than current highest
                 if(P <= biddingAuction.getHighestBid())
                 {
