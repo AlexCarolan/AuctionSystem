@@ -7,24 +7,33 @@ import java.math.RoundingMode;
  */
 public class CreateDriver
 {
+	
+	private final int creatorID;
+	private final Scanner reader;
+	private final CentralAuctioningServer server;
+
+    /**
+     * Constructor for CreateDriver class, requires no inputs
+     */
+	public CreateDriver(){
+        //Lookup remote auction server object - retry 3 times if failed
+        server = new AuctionConnector().connect();
+        //Get a new creator ID
+        creatorID = obtainCreatorID();
+        //Create an input scanner
+        reader = new Scanner(System.in);
+	}
+	
     /**
      * Starts the auction creator interface
      */
 	public void start()
 	{
-
-		//Lookup remote auction server object - retry 3 times if failed
-		CentralAuctioningServer server = new AuctionConnector().connect();
-
-		//Get a new creator ID
-        int creatorID = obtainCreatorID(server);
-
 		//Print active auctions
-        showActiveAuctions(creatorID, server);
+        showActiveAuctions();
 
-		//Allow for uesr input and respond to commands
+		//Allow for user input and respond to commands
 		String inputCommand = "";
-		Scanner reader = new Scanner(System.in);
 
 		while (!inputCommand.equals("exit") && !inputCommand.equals("EXIT") && !inputCommand.equals("Exit")) {
 
@@ -37,17 +46,17 @@ public class CreateDriver
 			if(inputCommand.equals("list") || inputCommand.equals("LIST") || inputCommand.equals("List"))
 			{
 			    //Shows active auctions
-                showActiveAuctions(creatorID, server);
+                showActiveAuctions();
             }
 			else if(inputCommand.equals("create") || inputCommand.equals("CREATE") || inputCommand.equals("Create"))
 			{
                 //Attempts to create a new auction
-                addNewAuction(creatorID, server, reader);
+                addNewAuction();
 			}
             else if(inputCommand.equals("end") || inputCommand.equals("END") || inputCommand.equals("End"))
             {
                 //Attempts to end an active auction
-                endActiveAuction(creatorID, server, reader);
+                endActiveAuction();
             }
             else
             {
@@ -67,10 +76,8 @@ public class CreateDriver
 
     /**
      * Prints out active auctions created by the user
-     * @param creatorID - ID of the creator
-     * @param server - the auction server
      */
-	private void showActiveAuctions(int creatorID, CentralAuctioningServer server)
+	private void showActiveAuctions()
     {
         System.out.println("=====================================================");
         System.out.println("\t\tActive Auctions");
@@ -89,10 +96,8 @@ public class CreateDriver
 
     /**
      * gets a new creator ID from the auction server
-     * @param server - the auction serevr
-     * @return the new creator ID
      */
-    private int obtainCreatorID(CentralAuctioningServer server)
+    private int obtainCreatorID()
     {
         //attempt to get a new creator ID
         int attempt = 1;
@@ -110,7 +115,10 @@ public class CreateDriver
         return 1;
     }
 
-    private void endActiveAuction(int creatorID, CentralAuctioningServer server, Scanner reader)
+	/**
+	* Attempt to end an active auction 
+	*/
+    private void endActiveAuction()
     {
         System.out.println("=====================================================");
         System.out.println("\t\tEnd Auction");
@@ -141,11 +149,8 @@ public class CreateDriver
 
     /**
      * Collects user input and attempts to create a new auction using the provided data
-     * @param creatorID - The ID of the auction creator
-     * @param server - The RMI server AuctionServer object
-     * @param reader - The scanner used to take user input
      */
-    private void addNewAuction(int creatorID, CentralAuctioningServer server, Scanner reader)
+    private void addNewAuction()
     {
         System.out.println("=====================================================");
         System.out.println("\t\tCreate New Auction");

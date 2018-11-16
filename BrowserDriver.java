@@ -8,21 +8,29 @@ import java.util.regex.Matcher;
  */
 public class BrowserDriver
 {
+    private final Scanner reader;
+    private final CentralAuctioningServer server;
+
+    /**
+     * Constructor for BrowserDriver class, requires no inputs
+     */
+    public BrowserDriver(){
+        //Lookup remote auction server object - retry 3 times if failed
+        server = new AuctionConnector().connect();
+        //Create an input scanner
+        reader = new Scanner(System.in);
+    }
 
     /**
      * starts the auction browser interface
      */
     public void start(){
 
-        //Lookup remote auction server object - retry 3 times if failed
-        CentralAuctioningServer server = new AuctionConnector().connect();
-
         //Print out currently active auctions
-        showListings(server);
+        showListings();
 
-        //Allow for uesr input and respond to commands
+        //Allow for user input and respond to commands
         String inputCommand = "";
-        Scanner reader = new Scanner(System.in);
 
         while (!inputCommand.equals("exit") && !inputCommand.equals("EXIT") && !inputCommand.equals("Exit")) {
 
@@ -34,11 +42,11 @@ public class BrowserDriver
             //Check input against list of commands
             if(inputCommand.equals("list") || inputCommand.equals("LIST") || inputCommand.equals("List"))
             {
-                showListings(server);
+                showListings();
             }
             else if(inputCommand.equals("bid") || inputCommand.equals("BID") || inputCommand.equals("Bid"))
             {
-                addBid(server, reader);
+                addBid();
             }
             else
             {
@@ -46,7 +54,6 @@ public class BrowserDriver
             }
 
         }
-
 
         //close input scanner before program termination
         reader.close();
@@ -60,9 +67,8 @@ public class BrowserDriver
 
     /**
      * Prints out currently active listings
-     * @param server - The server RMI object holding listings
      */
-    private void showListings(CentralAuctioningServer server) {
+    private void showListings() {
 
         System.out.println("=====================================================");
         System.out.println("\t\t Auction Browser");
@@ -81,10 +87,8 @@ public class BrowserDriver
 
     /**
      * Allows for user to make a bid, validates inputs
-     * @param server - the remote auction server object
-     * @param reader - the input scanner object
      */
-    private void addBid(CentralAuctioningServer server, Scanner reader)
+    private void addBid()
     {
 
         System.out.println("=====================================================");
